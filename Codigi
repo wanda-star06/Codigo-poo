@@ -1,0 +1,91 @@
+class Professor:
+  def __init__(self, nome):
+    self.nome = nome
+    self.disciplinas = []
+
+  def adicionar_disciplina(self, disciplina):
+    self.disciplinas.append(disciplina)
+
+class Disciplina:
+  def __init__(self, nome):
+    self.nome = nome
+    self.atividades = []
+
+  def adicionar_atividade(self, atividade):
+    self.atividades.append(atividade)
+
+class Atividade:
+  def __init__(self, nome, data):
+    self.nome = nome
+    self.data = data
+    self.concluida = False
+
+  def marcar_concluida(self):
+    self.concluida = True
+
+
+professor = Professor("Nome do Professor")
+disciplina = Disciplina("Nome da Disciplina")
+atividade = Atividade("Nome da Atividade", "Data da Atividade")
+
+professor.adicionar_disciplina(disciplina)
+disciplina.adicionar_atividade(atividade)
+
+# Menu de software
+def menu():
+  print("1. Adicionar disciplina")
+  print("2. Adicionar atividade")
+  print("3. Marcar atividade como concluída")
+  print("4. Listar atividades em aberto")
+  print("5. Listar atividades concluídas")
+
+opcao = int(input("Selecione uma opção do menu: "))
+
+if opcao == 1:
+  nome_disciplina = input("digite o nome da disciplina: ")
+  nova_disciplina = Disciplina(nome_disciplina)
+  professor.adicionar_disciplina(nova_disciplina)
+
+elif opcao == 2:
+  nome_atividade = input("digite o nome da atividade: ")
+  data_atividade = input("digite a data da atividade: ")
+  nova_atividade = Atividade(nome_atividade, data_atividade)
+  for disciplina in professor.disciplinas:
+    if nova_atividade.data in [atividade.data for atividade in disciplina.atividades]:
+      print("não é possível adicionar duas atividades para a mesma disciplina e na mesma data.")
+      break
+  else:
+    disciplina_escolhida = int(input("digite o número da disciplina para adicionar a atividade: "))
+    if disciplina_escolhida >= 1 and disciplina_escolhida <= len(professor.disciplinas):
+      disciplina_escolhida = professor.disciplinas[disciplina_escolhida - 1]
+      disciplina_escolhida.adicionar_atividade(nova_atividade)
+    else:
+      print("Número de disciplina nao valido.")
+
+elif opcao == 3:
+  nome_atividade = input("digite o nome da atividade para marcar como concluída: ")
+  for disciplina in professor.disciplinas:
+    for atividade in disciplina.atividades:
+      if atividade.nome == nome_atividade:
+        atividade.marcar_concluida()
+        print("atividade marcada como concluída.")
+        break
+    else:
+      continue
+    break
+  else:
+    print("atividade não encontrada.")
+
+elif opcao == 4:
+  print("atividades em aberto:")
+  for disciplina in professor.disciplinas:
+    for atividade in disciplina.atividades:
+      if not atividade.concluida:
+        print(f"- {disciplina.nome} - {atividade.nome} - {atividade.data}")
+
+elif opcao == 5:
+  print("atividades concluídas:")
+  for disciplina in professor.disciplinas:
+    for atividade in disciplina.atividades:
+      if atividade.concluida:
+        print(f"- {disciplina.nome} - {atividade.nome} - {atividade.data}")
